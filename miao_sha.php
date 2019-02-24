@@ -1,14 +1,15 @@
 <?php
 
-
+/*
 $redis = new Redis;
 $redis->connect('127.0.0.1', 6379);
-$redis->set("myfirst", 'myfirstvalue');
+$redis->set("myfirst", 200);
 
 $result = $redis->get('myfirst');
 var_dump($result);
+*/
 
-$times = 5;
+$times = 200;
 while($times-- > 0){
 	$pid = pcntl_fork();
 	if($pid > 0){
@@ -19,6 +20,17 @@ while($times-- > 0){
 }
 
 function test(){
-	sleep(5);
-	echo 123;
+	usleep(50000);
+	$redis = new Redis;
+	$redis->connect('127.0.0.1', 6379);
+	$left = $redis->get("myfirst");
+	if($left > 0){
+		$redis->decr('myfirst');
+		echo 'succ'."\n";
+	}else{
+		echo 'failed'."\n";
+	}
+	exit();
 }
+
+
