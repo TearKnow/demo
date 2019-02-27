@@ -72,35 +72,45 @@ function test(){
 */
     
     
-//如何解决 version 2 中的问题呢
+//如何解决 version 2 中的问题呢? 失败的再进行一次（用递归），一旦库存小于0，就退出
 $times = 200;
 while($times-- > 0){
     $pid = pcntl_fork();
     if($pid > 0){
-        test();
+        test($pid);
         exit;
     }
     
 }
 
-function test(){
+function test($pid){
     usleep(50000);
     
     $redis = new Redis;
     $redis->connect('127.0.0.1', 6379);
     
+    
     $redis->watch("myfirst");
     
     $left = $redis->get("myfirst");
     
-    echo $left."\n";
-    
     $redis->multi();
     $redis->decr('myfirst');
+    
+    if($left <= 0){
+        exit();
+    }
+    
     if($redis->exec() && $left > 0){
-        echo 'succ'."\n";
+        echo $pid."--".'succ'."\n";
     }else{
-        echo 'failed'."\n";
+        
+        echo $pid."--".'failed'."\n";
+        if($left > 0){
+            return test($pid);
+            
+        }
+        
     }
     
     
