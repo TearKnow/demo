@@ -24,4 +24,24 @@ for($i = 2; $i < count($arr); $i++){
 
 
 //例子二，在 [3, 34, 12, 4, 2, 5, 11] 中找到是否存在组合为 9 的情况
+//  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!每次都依赖上一个!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //也用选和不选，还有一个就是要找出口
+$arr = [3, 34, 12, 4, 2, 5, 11];
+function test($arr, $target){
+	echo implode('', $arr).'#'.$target."\n";
+	if($target == 0){//下面是2个出口
+		die('yes');
+	}
+	if(!$arr){
+		die('no data');
+	}
+	if($arr[0] == $target){
+		die('yes');
+	}
+
+	$last = array_pop($arr);//去除最后一个
+	test($arr, $target - $last);
+	test($arr, $target);
+}
+
+test($arr, 9);
