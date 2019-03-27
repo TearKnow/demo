@@ -23,25 +23,20 @@ for($i = 2; $i < count($arr); $i++){
 //var_dump($opt);
 
 
-//例子二，在 [3, 34, 12, 4, 2, 5, 11] 中找到是否存在组合为 9 的情况
+//例子二，这是一个递归的方法，在 [3, 34, 12, 4, 2, 5, 11] 中找到是否存在组合为 9 的情况
 //  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!每次都依赖上一个!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //也用选和不选，还有一个就是要找出口
-$arr = [3, 34, 12, 4, 2, 5, 11];
-function test($arr, $target){
-	echo implode('', $arr).'#'.$target."\n";
+$arr = [3, 34, 12, 4, 2, 5];
+function test($arr, $i, $target){
 	if($target == 0){//下面是2个出口
-		die('yes');
+        return true;
 	}
-	if(!$arr){
-		die('no data');
-	}
-	if($arr[0] == $target){
-		die('yes');
+	if($i == 0){
+        return $arr[0] == $target;
 	}
 
-	$last = array_pop($arr);//去除最后一个
-	test($arr, $target - $last);
-	test($arr, $target);
+	return test($arr, $i - 1, $target - $arr[$i]) || test($arr, $i - 1, $target);
 }
 
-test($arr, 9);
+$result = test($arr, 5, 26);
+var_dump($result);
