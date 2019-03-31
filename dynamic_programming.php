@@ -66,5 +66,5 @@
         return $map;
     }
 
-    $result = sub(5, 13);
+    $result = sub(5, 9);
     var_dump($result);
